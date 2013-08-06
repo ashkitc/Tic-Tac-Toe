@@ -9,11 +9,21 @@ public:
 	bool isEmpty(); 
 	bool isEndOfGame();
     void checkWinner();
-	bool setValueOfColumnWithCoordinates(char newValue, int row, int column);
+	bool setValueOfCellWithCoordinates(char newValue, int row, int column);
+	PlayBoardCell& cellWithCoordinates(int row, int column);
+	PlayBoardCell& maxRaitedColumn(char sign);
+	char getWinner() { return winner; }
+	
 private:
-	PlayBoardCell gamefield[3][3];
+	PlayBoardCell gamefield[9];
 	void setWiner(char value);
+	void setCorrnersRaiting();
 	bool allCellsAreOccupied();
+	void calculateRaiting(char sign);
+	PlayBoardCell& centerCell() {return cellWithCoordinates(1,1); }
+	void resetRaiting(char sign);
+	void resetRaitingOnRows(char sign);
+	void resetRaitingOnColumns(char sign);
 	char winner;
 };
 

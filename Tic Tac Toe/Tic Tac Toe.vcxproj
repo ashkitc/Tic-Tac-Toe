@@ -63,12 +63,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameBrain.cpp" />
+    <ClCompile Include="GameLine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayBoard.cpp" />
     <ClCompile Include="PlayBoardCell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBrain.h" />
+    <ClInclude Include="GameLine.h" />
     <ClInclude Include="PlayBoard.h" />
     <ClInclude Include="PlayBoardCell.h" />
   </ItemGroup>

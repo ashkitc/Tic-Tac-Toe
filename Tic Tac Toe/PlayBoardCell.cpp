@@ -30,5 +30,6 @@ PlayBoardCell::~PlayBoardCell(void)
 		 return false;
 	 }
 	 value = newValue;
+	 raiting = DONT_CARE_RAITING;
 	 return true;
  }

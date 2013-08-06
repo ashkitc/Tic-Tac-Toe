@@ -33,6 +33,18 @@ void GameBrain::play()
 			userChoice();
 		}
 	}
+	if(playBoard.getWinner() == usersSign)
+	{
+		cout << "Congratulations you WON!!!!" << endl;
+	} else 
+		if (playBoard.getWinner() == ' ')
+		{
+			cout << "Not bad, frendship won" << endl;
+		}
+		else 
+		{
+			cout << "Sorry, but this time you LOSER"  << endl;
+		}
 }
 
 bool GameBrain::isCorrectCoordinates(int row, int column)
@@ -54,7 +66,7 @@ void GameBrain::userChoice()
 			cout << "Enter a coordinates of cell for choice" << endl;
 			cin >> row >> column;
 		}
-		choiceDone = playBoard.setValueOfColumnWithCoordinates(usersSign, row, column);
+		choiceDone = playBoard.setValueOfCellWithCoordinates(usersSign, row, column);
 		row = -1;
 		column = -1;
 	}
@@ -66,7 +78,17 @@ void GameBrain::userChoice()
 
 void GameBrain::cpuChoice()
 {
-
+	char cpuSign;
+	if(usersSign == 'X' || usersSign == 'x')
+	{
+		cpuSign = 'O';
+	} else 
+	{
+		cpuSign = 'X';
+	}
+	cout << "After CPU choice" << endl;
+	playBoard.maxRaitedColumn(cpuSign).setValue(cpuSign);
+	playBoard.displayToConsole();
 }
 
 void GameBrain::choseSign()
