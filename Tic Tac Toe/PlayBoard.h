@@ -4,26 +4,24 @@ class PlayBoard
 {
 public:
 	PlayBoard(void);
-	~PlayBoard(void);
 	void displayToConsole();
-	bool isEmpty(); 
 	bool isEndOfGame();
-    void checkWinner();
 	bool setValueOfCellWithCoordinates(char newValue, int row, int column);
-	PlayBoardCell& cellWithCoordinates(int row, int column);
 	PlayBoardCell& maxRaitedColumn(char sign);
 	char getWinner() { return winner; }
-	
 private:
 	PlayBoardCell gamefield[9];
 	void setWiner(char value);
-	void setCorrnersRaiting();
+	void setCorrnersRating();
 	bool allCellsAreOccupied();
-	void calculateRaiting(char sign);
+	void calculateRating(char sign);
 	PlayBoardCell& centerCell() {return cellWithCoordinates(1,1); }
-	void resetRaiting(char sign);
-	void resetRaitingOnRows(char sign);
-	void resetRaitingOnColumns(char sign);
+	void resetRating(char sign);
+	void resetRatingOnRows(char sign);
+	void resetRatingOnColumns(char sign);
+	bool isEmpty(); 
+    void checkWinner();
+	PlayBoardCell& cellWithCoordinates(int row, int column);
 	char winner;
 };
 

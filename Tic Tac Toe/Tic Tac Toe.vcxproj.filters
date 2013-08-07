@@ -27,7 +27,7 @@
     <ClCompile Include="GameBrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameLine.cpp">
+    <ClCompile Include="PlayBoardLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClInclude Include="GameBrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameLine.h">
+    <ClInclude Include="PlayBoardLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

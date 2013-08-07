@@ -1,24 +1,26 @@
 #include "PlayBoard.h"
 #include <iostream>
-
+#include <algorithm>
+#include "PlayBoardLine.h"
 PlayBoard::PlayBoard(void)
 {
 	winner = ' '; //we haven't winner when init playboard
-//	gamefield[1][1].serRaiting(MAX_RAITING);
 	int current = 0;
 	for (int row = 0; row < 3; ++ row)
 	{
 		for (int column = 0; column < 3; ++ column)
 		{
-			gamefield[current].setCoordinates(row,column);
+			gamefield[current].setCoordinates(row,column); //Set column's coordinates
+			gamefield[current].setRating(EMPTY_CELL_RATING); //End raiting for empty cells
 			++current;
 		}
 	}
-	centerCell().setRaiting(CENTER_RAITING);
-	setCorrnersRaiting();
+	//when game begins center cell and corner cells are most important
+	centerCell().setRating(CENTER_RATING); 
+	setCorrnersRating(); 
 }
 
-void PlayBoard::setWiner(char value)
+void PlayBoard::setWiner(char value) //For cheking who wins
 {
 	if(value == 'x' || value == 'X' ||
 	   value == 'o' || value == 'O')
@@ -27,21 +29,17 @@ void PlayBoard::setWiner(char value)
 	}
 }
 
-PlayBoard::~PlayBoard(void)
-{
-}
-
 PlayBoardCell& PlayBoard::cellWithCoordinates(int row, int column)
 {
-
+	PlayBoardCell *chosen = new PlayBoardCell();
 	for(int i = 0; i <9; ++i)
 	{
 		if(gamefield[i].row() == row && gamefield[i].column() == column)
 		{
-			return gamefield[i];
+			chosen = &gamefield[i];
 		}
 	}
-	//return;
+	return *chosen;
 }
 
 void PlayBoard::displayToConsole()
@@ -80,7 +78,7 @@ bool PlayBoard::isEmpty()
 	return true;
 }
 
-bool PlayBoard::allCellsAreOccupied()
+bool PlayBoard::allCellsAreOccupied() 
 {
 	for (int row = 0; row < 3; ++ row)
 	{
@@ -158,123 +156,65 @@ bool PlayBoard::setValueOfCellWithCoordinates( char newValue, int row, int colum
 	return false;
 }
 
-void PlayBoard::setCorrnersRaiting()
+void PlayBoard::setCorrnersRating()
 {
-	cellWithCoordinates(0,0).setRaiting(CORNER_RAITING);
-	cellWithCoordinates(2,2).setRaiting(CORNER_RAITING);
-	cellWithCoordinates(0,2).setRaiting(CORNER_RAITING);
-	cellWithCoordinates(2,0).setRaiting(CORNER_RAITING);
+	cellWithCoordinates(0,0).setRating(CORNER_RATING);
+	cellWithCoordinates(2,2).setRating(CORNER_RATING);
+	cellWithCoordinates(0,2).setRating(CORNER_RATING);
+	cellWithCoordinates(2,0).setRating(CORNER_RATING);
 }
 
-void PlayBoard::resetRaiting(char sign)
+void PlayBoard::resetRating(char sign)
 {
-	centerCell().setRaiting(CENTER_RAITING);
-	setCorrnersRaiting();
-	resetRaitingOnRows(sign);
-	resetRaitingOnColumns(sign);
-	for(int i = 0; i < 9; ++i)
+	resetRatingOnRows(sign);
+	resetRatingOnColumns(sign);
+	for (int i = 0; i < 9; ++i)
 	{
-		if (!gamefield[i].isEmpty())
+		if(!gamefield[i].isEmpty())
 		{
-			gamefield[i].setRaiting(DONT_CARE_RAITING);
+			gamefield[i].setRating(DONT_CARE_RATING);
 		}
 	}
 }
 
-void PlayBoard::resetRaitingOnRows(char sign)
+void PlayBoard::resetRatingOnRows(char sign)
 {
 	/*
 	Looking for row where sign can win or lose and set priority 
 			of this row's empty cells 
 	*/
-	for (int i = 0; i < 3; ++ i) 
+	for (int i = 0; i < 9; i +=3)
 	{
-		int j = 0;
-		if(cellWithCoordinates(i,j).getValue() == cellWithCoordinates(i,j+1).getValue()
-									&& !cellWithCoordinates(i,j).isEmpty())
-		{
-			if( cellWithCoordinates(i,j+2).isEmpty() )
-			{
-				if(cellWithCoordinates(i,j).getValue() == sign)
-				{
-					cellWithCoordinates(i,j+2).setRaiting(CAN_WIN_RAITING);
-				}
-				else
-				{
-					cellWithCoordinates(i,j+2).setRaiting(CAN_LOSE_RAITING);
-				}
-			}
-		}
-		if(cellWithCoordinates(i,j).getValue() == cellWithCoordinates(i,j+2).getValue()
-									&& !cellWithCoordinates(i,j).isEmpty())
-
-		{
-			if( cellWithCoordinates(i,j+1).isEmpty() )
-			{
-				if(cellWithCoordinates(i,j).getValue() == sign)
-				{
-					cellWithCoordinates(i,j+1).setRaiting(CAN_WIN_RAITING);
-				}
-				else
-				{
-					cellWithCoordinates(i,j+1).setRaiting(CAN_LOSE_RAITING);
-				}
-			}
-		}
-	}	
+		PlayBoardLine line;
+	    line.initWithLine( (gamefield + i) );
+		line.setRatingForSign(sign);
+	}
 }
 
-void PlayBoard::resetRaitingOnColumns(char sign)
+void PlayBoard::resetRatingOnColumns(char sign)
 {
 
 	/*
 	Looking for column where sign can win or lose and set priority 
-			of this row's empty cells 
+			of this colums's empty cells 
 	*/
-	for (int i = 0; i < 3; ++ i) 
+	for (int i = 0; i < 3; ++i)
 	{
-		int j = 0;
-		if(cellWithCoordinates(j,i).getValue() == cellWithCoordinates(j+1,i).getValue()
-									&& !cellWithCoordinates(j,i).isEmpty())
+		PlayBoardLine line;
+		for (int j = 0; j < 3; ++j)
 		{
-			if( cellWithCoordinates(j+2,i).isEmpty() )
-			{
-				if(cellWithCoordinates(j,i).getValue() == sign)
-				{
-					cellWithCoordinates(j+2,i).setRaiting(CAN_WIN_RAITING);
-				}
-				else
-				{
-					cellWithCoordinates(j+2,i).setRaiting(CAN_LOSE_RAITING);
-				}
-			}
+			line.addCellPtr( &cellWithCoordinates(j,i) );
 		}
-		if(cellWithCoordinates(j,i).getValue() == cellWithCoordinates(j+2,i).getValue()
-									&& !cellWithCoordinates(j,i).isEmpty())
-
-		{
-			if( cellWithCoordinates(j+1,i).isEmpty() )
-			{
-				if(cellWithCoordinates(j,i).getValue() == sign)
-				{
-					cellWithCoordinates(j+1,i).setRaiting(CAN_WIN_RAITING);
-				}
-				else
-				{
-					cellWithCoordinates(j+1,i).setRaiting(CAN_LOSE_RAITING);
-				}
-			}
-		}
-	}	
+		line.setRatingForSign(sign);
+	}
 }
-
 PlayBoardCell& PlayBoard::maxRaitedColumn(char sign)
 {
-	resetRaiting(sign);
+	resetRating(sign);
 	PlayBoardCell *maxRatedCell = new PlayBoardCell();
 	for(int i = 0; i < 9; ++i)
 	{
-		if(gamefield[i].getRaiting() > maxRatedCell->getRaiting())
+		if(gamefield[i].getRating() > maxRatedCell->getRating())
 		{
 			maxRatedCell = &gamefield[i];
 		}

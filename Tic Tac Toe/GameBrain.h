@@ -10,8 +10,6 @@ public:
 	void choseSign();
 	void userChoice();
 	void cpuChoice();
-//	void cpuMakeBestChoiceForX();
-//	void cpuMakebestChoiceForO();
 	bool isCorrectSign(char sign);
 private:
 	PlayBoard playBoard;

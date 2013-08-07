@@ -63,16 +63,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameBrain.cpp" />
-    <ClCompile Include="GameLine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayBoard.cpp" />
     <ClCompile Include="PlayBoardCell.cpp" />
+    <ClCompile Include="PlayBoardLine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBrain.h" />
-    <ClInclude Include="GameLine.h" />
     <ClInclude Include="PlayBoard.h" />
     <ClInclude Include="PlayBoardCell.h" />
+    <ClInclude Include="PlayBoardLine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

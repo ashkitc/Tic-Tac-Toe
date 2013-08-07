@@ -4,16 +4,13 @@
 PlayBoardCell::PlayBoardCell(void)
 {
 	value = ' '; // By default cell inits with space (cell is empty);
-	raiting = 0;
+	rating = 0;
 	
 }
 
 
-PlayBoardCell::~PlayBoardCell(void)
-{
-	raiting = 0;
-}
 
+//Check if cell is empty
  bool PlayBoardCell::isEmpty()
 {
 	if (value != ' ')
@@ -22,7 +19,8 @@ PlayBoardCell::~PlayBoardCell(void)
 	}
 	return true;
 }
-
+ 
+//set value if cell is empty else returns false
  bool PlayBoardCell::setValue(char newValue)
  {
 	 if( !isEmpty() )
@@ -30,6 +28,6 @@ PlayBoardCell::~PlayBoardCell(void)
 		 return false;
 	 }
 	 value = newValue;
-	 raiting = DONT_CARE_RAITING;
+	 rating = DONT_CARE_RATING; //set rating for occupied cell
 	 return true;
  }

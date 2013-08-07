@@ -21,8 +21,10 @@ void GameBrain::startPlaying()
 
 void GameBrain::play()
 {
-	while (!playBoard.isEndOfGame())
+	volatile bool endOfGame = false;
+	while(!endOfGame)
 	{
+		
 		if(usersSign == 'X' || usersSign == 'x')
 		{
 			userChoice();
@@ -32,8 +34,9 @@ void GameBrain::play()
 			cpuChoice();
 			userChoice();
 		}
+		endOfGame = playBoard.isEndOfGame();
 	}
-	if(playBoard.getWinner() == usersSign)
+		if(playBoard.getWinner() == usersSign)
 	{
 		cout << "Congratulations you WON!!!!" << endl;
 	} else 
@@ -57,38 +60,44 @@ bool GameBrain::isCorrectCoordinates(int row, int column)
 }
 void GameBrain::userChoice()
 {
-	int row = -1, column = -1;
-	bool choiceDone = false;
-	while (!choiceDone)
+	if(!playBoard.isEndOfGame())
 	{
-		while ( !isCorrectCoordinates(row,column) )
+		int row = -1, column = -1;
+		bool choiceDone = false;
+		while (!choiceDone)
 		{
-			cout << "Enter a coordinates of cell for choice" << endl;
-			cin >> row >> column;
-		}
+			while ( !isCorrectCoordinates(row,column) )
+			{
+				cout << "Enter a coordinates of cell for choice" << endl;
+				cin >> row >> column;
+			}
 		choiceDone = playBoard.setValueOfCellWithCoordinates(usersSign, row, column);
 		row = -1;
 		column = -1;
+		}
+		cout << "Game field: " << endl;
+	    playBoard.displayToConsole();
 	}
-	 cout << "Game field: " << endl;
-	 playBoard.displayToConsole();
 }
 
 
 
 void GameBrain::cpuChoice()
 {
-	char cpuSign;
-	if(usersSign == 'X' || usersSign == 'x')
+	if(!playBoard.isEndOfGame())
 	{
-		cpuSign = 'O';
-	} else 
-	{
-		cpuSign = 'X';
+		char cpuSign;
+		if(usersSign == 'X' || usersSign == 'x')
+		{
+			cpuSign = 'O';
+		} else 
+		{
+			cpuSign = 'X';
+		}
+		cout << "After CPU choice" << endl;
+		playBoard.maxRaitedColumn(cpuSign).setValue(cpuSign);
+		playBoard.displayToConsole();
 	}
-	cout << "After CPU choice" << endl;
-	playBoard.maxRaitedColumn(cpuSign).setValue(cpuSign);
-	playBoard.displayToConsole();
 }
 
 void GameBrain::choseSign()
