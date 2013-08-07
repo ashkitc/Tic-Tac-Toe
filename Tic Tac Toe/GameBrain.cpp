@@ -22,10 +22,10 @@ void GameBrain::startPlaying()
 void GameBrain::play()
 {
 	volatile bool endOfGame = false;
-	while(!endOfGame)
+	while(!endOfGame) //checks if game isn't over
 	{
 		
-		if(usersSign == 'X' || usersSign == 'x')
+		if(usersSign == 'X' || usersSign == 'x') // checks who make choise first
 		{
 			userChoice();
 			cpuChoice();
@@ -60,11 +60,11 @@ bool GameBrain::isCorrectCoordinates(int row, int column)
 }
 void GameBrain::userChoice()
 {
-	if(!playBoard.isEndOfGame())
+	if(!playBoard.isEndOfGame()) 
 	{
 		int row = -1, column = -1;
 		bool choiceDone = false;
-		while (!choiceDone)
+		while (!choiceDone) ///ask user to make choice until he'll enter correct coordinates
 		{
 			while ( !isCorrectCoordinates(row,column) )
 			{
@@ -95,7 +95,7 @@ void GameBrain::cpuChoice()
 			cpuSign = 'X';
 		}
 		cout << "After CPU choice" << endl;
-		playBoard.maxRaitedColumn(cpuSign).setValue(cpuSign);
+		playBoard.maxRaitedCell(cpuSign).setValue(cpuSign);
 		playBoard.displayToConsole();
 	}
 }

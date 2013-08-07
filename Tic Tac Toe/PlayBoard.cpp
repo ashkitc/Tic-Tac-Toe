@@ -20,7 +20,7 @@ PlayBoard::PlayBoard(void)
 	setCorrnersRating(); 
 }
 
-void PlayBoard::setWiner(char value) //For cheking who wins
+void PlayBoard::setWiner(char value) //For checking who wins
 {
 	if(value == 'x' || value == 'X' ||
 	   value == 'o' || value == 'O')
@@ -29,14 +29,14 @@ void PlayBoard::setWiner(char value) //For cheking who wins
 	}
 }
 
-PlayBoardCell& PlayBoard::cellWithCoordinates(int row, int column)
+PlayBoardCell& PlayBoard::cellWithCoordinates(int row, int column) 
 {
-	PlayBoardCell *chosen = new PlayBoardCell();
-	for(int i = 0; i <9; ++i)
+	PlayBoardCell *chosen = NULL; //Temporary pointer to the cell
+	for(int i = 0; i <9; ++i) 
 	{
 		if(gamefield[i].row() == row && gamefield[i].column() == column)
 		{
-			chosen = &gamefield[i];
+			chosen = &gamefield[i]; 
 		}
 	}
 	return *chosen;
@@ -51,7 +51,7 @@ void PlayBoard::displayToConsole()
 			std::cout << cellWithCoordinates(row,column).getValue();
 			if(column < 2)
 			{
-				std::cout<< '|';
+				std::cout<< '|'; 
 			}
 		}
 		std::cout << std::endl;
@@ -65,7 +65,7 @@ void PlayBoard::displayToConsole()
 
 bool PlayBoard::isEmpty()
 {
-	for (int row = 0; row < 3; ++row)
+	for (int row = 0; row < 3; ++row) // checking if all cells are empty
 	{
 		for (int column = 0; column < 3; ++column)
 		{
@@ -80,7 +80,7 @@ bool PlayBoard::isEmpty()
 
 bool PlayBoard::allCellsAreOccupied() 
 {
-	for (int row = 0; row < 3; ++ row)
+	for (int row = 0; row < 3; ++ row) // checking if all cells are occupied
 	{
 		for (int column = 0; column < 3; ++column)
 		{
@@ -93,14 +93,14 @@ bool PlayBoard::allCellsAreOccupied()
 	return true;
 }
 
-bool PlayBoard::isEndOfGame()
+bool PlayBoard::isEndOfGame() // cheking if the game ends
 {
-	if(allCellsAreOccupied())
+	if(allCellsAreOccupied()) //cheking if all cells are occupied
 	{
 		return true;
 	}  else 
 	{
-		checkWinner();
+		checkWinner(); //checking if somebody wins
 		if (winner != ' ')
 		{
 			return true;
@@ -113,26 +113,29 @@ void PlayBoard::checkWinner()
 {
 
 	//Checking rows
-	for (int row = 0; row< 3; ++row)
+	for (int i = 0; i < 9; i +=3)
 	{
-		if( cellWithCoordinates(row,0).getValue() == cellWithCoordinates(row,1).getValue() &&
-			cellWithCoordinates(row,0).getValue() == cellWithCoordinates(row,2).getValue() )
+		PlayBoardLine line; //Playboard lines is a support class who can check winner in one line
+	    line.initWithLine( (gamefield + i) ); //Init Playboard lines with current row
+		if(line.hasWinner())
 		{
-			setWiner(  cellWithCoordinates(row,0).getValue() );
+			setWiner(gamefield[i].getValue());
 		}
 	}
-
 	//Checking columns
-	for (int column = 0; column < 3; ++column)
+    for (int i = 0; i < 3; ++i)
 	{
-		if( cellWithCoordinates(0,column).getValue() == cellWithCoordinates(1,column).getValue() && 
-			cellWithCoordinates(0,column).getValue() ==cellWithCoordinates(2,column).getValue() )
+		PlayBoardLine line;
+		for (int j = 0; j < 3; ++j) 
 		{
-				setWiner( cellWithCoordinates(0,column).getValue());
+			line.addCellPtr( &cellWithCoordinates(j,i) ); //add to the line the next cell from current column
+		}
+		if(line.hasWinner()) 
+		{
+			setWiner(gamefield[i].getValue());
 		}
 	}
-
-	//Checking diagonals
+	//Checking diagonals 
 	if ( cellWithCoordinates(0,0).getValue() == cellWithCoordinates(1,1).getValue() &&
 		 cellWithCoordinates(0,0).getValue() == cellWithCoordinates(2,2).getValue())
 	{
@@ -150,13 +153,13 @@ bool PlayBoard::setValueOfCellWithCoordinates( char newValue, int row, int colum
 {
 	if( cellWithCoordinates(row,column).isEmpty() )
 	{
-		cellWithCoordinates(row,column).setValue(newValue);
+		cellWithCoordinates(row,column).setValue(newValue); 
 		return true;
 	}
 	return false;
 }
 
-void PlayBoard::setCorrnersRating()
+void PlayBoard::setCorrnersRating() // sets raiting for all corners
 {
 	cellWithCoordinates(0,0).setRating(CORNER_RATING);
 	cellWithCoordinates(2,2).setRating(CORNER_RATING);
@@ -166,9 +169,9 @@ void PlayBoard::setCorrnersRating()
 
 void PlayBoard::resetRating(char sign)
 {
-	resetRatingOnRows(sign);
-	resetRatingOnColumns(sign);
-	for (int i = 0; i < 9; ++i)
+	resetRatingOnRows(sign); //fing critical rows (rows where cpu can win or lose by one step)
+	resetRatingOnColumns(sign);//fing critical columns 
+	for (int i = 0; i < 9; ++i) //reset raiting on occupied cells
 	{
 		if(!gamefield[i].isEmpty())
 		{
@@ -208,15 +211,15 @@ void PlayBoard::resetRatingOnColumns(char sign)
 		line.setRatingForSign(sign);
 	}
 }
-PlayBoardCell& PlayBoard::maxRaitedColumn(char sign)
+PlayBoardCell& PlayBoard::maxRaitedCell(char sign)
 {
-	resetRating(sign);
+	resetRating(sign); //recalculate rating for all cells
 	PlayBoardCell *maxRatedCell = new PlayBoardCell();
 	for(int i = 0; i < 9; ++i)
 	{
 		if(gamefield[i].getRating() > maxRatedCell->getRating())
 		{
-			maxRatedCell = &gamefield[i];
+			maxRatedCell = &gamefield[i]; //search cell with max raiting
 		}
 	}
 	return *maxRatedCell;
